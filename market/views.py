@@ -3,6 +3,7 @@ from django.shortcuts import render
 from rest_framework.parsers import JSONParser
 from rest_framework.response import Response
 
+from user.permissions import IsVendor
 from .models import Product, Category
 from rest_framework.views import APIView
 from .serializers import ProductSerializer
@@ -11,8 +12,9 @@ from .serializers import CategorySerializer
 
 
 class ProductListApiView(APIView):
+    permission_classes = [IsVendor]
 
-       def get(self,  request):
+    def get(self,  request):
         products = Product.objects.all()
         serializers = ProductSerializer(products, many=True)
         return Response(serializers.data)
